@@ -51,10 +51,8 @@ public class ThreeSum {
             left = i + 1;
             right = nums.length - 1;
             int requiredSum = -(nums[i]);
-            List<Integer> tempList = null;
             while (left < right) {
                 if (nums[left] + nums[right] == requiredSum) {
-                    tempList = new ArrayList<Integer>();
                     list.add(Arrays.asList(nums[i], nums[left], nums[right]));
                     left++;
                     while (left < right && nums[left] == nums[left - 1]) {
