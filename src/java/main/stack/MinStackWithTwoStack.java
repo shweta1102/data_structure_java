@@ -51,55 +51,37 @@ import java.util.Stack;
  * int param_3 = obj.top();
  * int param_4 = obj.getMin();
  */
-public class MinStack {
-    Stack<StackElement> customStack;
+public class MinStackWithTwoStack {
+    Stack<Integer> valStack;
+    Stack<Integer> minStack;
 
-    public MinStack() {
-        customStack = new Stack<StackElement>();
+    public MinStackWithTwoStack() {
+        valStack = new Stack<Integer>();
+        minStack = new Stack<Integer>();
     }
 
     public void push(int val) {
-        //if stack is not empty then peek the last node and compare the min value with the current value and push accprdingly
-        if (!customStack.isEmpty()) {
-            StackElement topElement = customStack.peek();
-            if (topElement.getMinimum() < val) {
-                customStack.push(new StackElement(topElement.getMinimum(), val));
+        valStack.push(val);
+        if (!minStack.isEmpty()) {
+            int topElement = minStack.peek();
+            if (topElement < val) {
+                minStack.push(topElement);
                 return;
             }
         }
-        customStack.push(new StackElement(val, val));
-        return;
+        minStack.push(val);
     }
 
     public void pop() {
-        customStack.pop();
+        valStack.pop();
+        minStack.pop();
     }
 
     public int top() {
-        StackElement topElement = customStack.peek();
-        return topElement.getVal();
+        return valStack.peek();
     }
 
     public int getMin() {
-        StackElement topElement = customStack.peek();
-        return topElement.getMinimum();
-    }
-
-    private class StackElement {
-        private int minimum;
-        private int val;
-
-        StackElement(int minimum, int val) {
-            this.minimum = minimum;
-            this.val = val;
-        }
-
-        public int getMinimum() {
-            return this.minimum;
-        }
-
-        public int getVal() {
-            return this.val;
-        }
+        return minStack.peek();
     }
 }
