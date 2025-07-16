@@ -51,4 +51,20 @@ public class JumpGameForMinimumJumps {
         }
         return jumps;
     }
+
+    public int jump(int[] nums) {
+        int maxIndex = 0;
+        int lastJumpIndex = 0;
+        int jumps = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            maxIndex = Math.max(maxIndex, i + nums[i]);
+            if (i == lastJumpIndex) {
+                lastJumpIndex = maxIndex;
+                if (maxIndex <= i)
+                    return 0;
+                jumps++;
+            }
+        }
+        return jumps;
+    }
 }
