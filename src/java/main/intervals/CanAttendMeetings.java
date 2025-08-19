@@ -26,6 +26,8 @@ public class CanAttendMeetings {
      * If the start time of the current interval is less than the end time of the previous interval, then the two intervals overlap and the person cannot attend both meetings, so we return false.
      * Otherwise, the person can attend both meetings, and we continue to the next interval.
      * If we reach the end of the list without finding any overlapping intervals, then the person can attend all meetings, and we return true.
+     * Time Complexity: O(n logn)
+     * Space Complexity: O(1)
      *
      * @param intervals
      * @return
