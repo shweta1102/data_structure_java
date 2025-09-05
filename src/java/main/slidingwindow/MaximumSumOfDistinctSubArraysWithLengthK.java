@@ -1,6 +1,7 @@
 package src.java.main.slidingwindow;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * You are given an integer array nums and an integer k. Find the maximum subarray sum of all the subarrays of nums that meet the following conditions:
@@ -48,8 +49,6 @@ import java.util.HashMap;
  */
 public class MaximumSumOfDistinctSubArraysWithLengthK {
     public long maximumSubarraySum(int[] nums, int k) {
-        //cannot use hashset because we need to keep count of repeating characters ex:[9,9,9,1,2,3] --> using set will fail this usecase when we slide the window over repeating character
-        //HashMap will also count the unique numbers int he array and ensure number equal to k when map size is k and as we keep removing the elements that are out of window --> if the map size == k then it will make sure that frequency of each element is 1
         HashMap<Integer, Integer> state = new HashMap<Integer, Integer>();
         int start = 0;
         long maxSum = 0;
@@ -67,6 +66,34 @@ public class MaximumSumOfDistinctSubArraysWithLengthK {
                 currentSum -= nums[start];
                 if (state.get(nums[start]) == 0)
                     state.remove(nums[start]);
+                start++;
+            }
+        }
+        return maxSum;
+    }
+
+    public long maximumSubarraySumWithHashSet(int[] nums, int k) {
+        //hash set of size k to maintain unique elements
+        long maxSum = 0;
+        int start = 0;
+        HashSet<Integer> uniqueSet = new HashSet<Integer>();
+        long currentSum = 0;
+        for (int end = 0; end < nums.length; end++) {
+            currentSum += nums[end];
+            if (uniqueSet.contains(nums[end])) {
+                while (nums[start] != nums[end]) {
+                    currentSum -= nums[start];
+                    uniqueSet.remove(nums[start]);
+                    start++;
+                }
+                currentSum -= nums[start];
+                start++;
+            }
+            uniqueSet.add(nums[end]);
+            if (end - start + 1 == k) {
+                maxSum = Math.max(maxSum, currentSum);
+                currentSum -= nums[start];
+                uniqueSet.remove(nums[start]);
                 start++;
             }
         }
