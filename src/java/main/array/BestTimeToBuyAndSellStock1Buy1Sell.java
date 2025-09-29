@@ -30,15 +30,13 @@ package src.java.main.array;
 public class BestTimeToBuyAndSellStock1Buy1Sell {
 
     public int maxProfit(int[] prices) {
-        if (prices.length <= 1)
-            return 0;
-        int min = prices[0];
         int maxProfit = 0;
+        int buyIndex = 0;
         for (int i = 1; i < prices.length; i++) {
-            if (prices[i] < min) {
-                min = prices[i];
+            if (prices[i] > prices[buyIndex]) {
+                maxProfit = Math.max(maxProfit, (prices[i] - prices[buyIndex]));
             } else {
-                maxProfit = Math.max(maxProfit, (prices[i] - min));
+                buyIndex = i;
             }
         }
         return maxProfit;

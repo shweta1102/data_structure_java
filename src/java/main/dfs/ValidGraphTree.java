@@ -31,30 +31,28 @@ public class ValidGraphTree {
         HashMap<Integer, List<Integer>> adjList = new HashMap<>();
         for (int[] edge : edges) {
             adjList.putIfAbsent(edge[0], new ArrayList<Integer>());
-            adjList.putIfAbsent(edge[1], new ArrayList<Integer>());
             List<Integer> neighbors = adjList.get(edge[0]);
             neighbors.add(edge[1]);
             adjList.put(edge[0], neighbors);
-            neighbors = adjList.get(edge[1]);
-            neighbors.add(edge[0]);
-            adjList.put(edge[1], neighbors);
         }
-        if (!dfsHasCycle(adjList, 0, visited, -1)) {
+        if (!dfsHasCycle(adjList, 0, visited)) {
             int notvisited = 0;
             for (int i = 0; i < n; i++) {
                 if (!visited[i])
                     notvisited++;
             }
-            return !(notvisited > 1);
+            return notvisited == 0;
         }
         return false;
     }
 
-    private boolean dfsHasCycle(HashMap<Integer, List<Integer>> adjList, int current, boolean[] visited, int parent) {
+    private boolean dfsHasCycle(HashMap<Integer, List<Integer>> adjList, int current, boolean[] visited) {
         visited[current] = true;
         List<Integer> neighbors = adjList.get(current);
+        if (neighbors == null)
+            return false;
         for (Integer neighbor : neighbors) {
-            if (neighbor != parent && (visited[neighbor] || dfsHasCycle(adjList, neighbor, visited, current))) {
+            if ((visited[neighbor] || dfsHasCycle(adjList, neighbor, visited))) {
                 return true;
             }
         }

@@ -37,6 +37,7 @@ public class MaximalSquare {
      * @return
      */
     public int maximalSquare(char[][] matrix) {
+        //if the number of area becomes more than 10 char will not be able to hold digits like 10,11. So create different array to  store area
         int max_area = 0;
         int[][] area = new int[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {

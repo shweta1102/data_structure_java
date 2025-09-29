@@ -45,18 +45,15 @@ import java.util.Stack;
  */
 public class ValidParanthesis {
     public boolean isValid(String s) {
-        if (s.length() % 2 != 0)
-            return false;
-        Stack<Character> stack = new Stack<>();
-        for (char c : s.toCharArray()) {
-            if (c == '{' || c == '(' || c == '[') {
-                stack.push(Character.valueOf(c));
+        Stack<Character> stack = new Stack<Character>();
+        for (Character ch : s.toCharArray()) {
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack.push(ch);
             } else {
                 if (stack.isEmpty())
                     return false;
-                Character top = stack.pop();
-                if ((c == ')' && top != '(') || (c == ']' && top != '[') ||
-                        (c == '}' && top != '{'))
+                char stackCh = stack.pop();
+                if (ch == ')' && stackCh != '(' || ch == ']' && stackCh != '[' || ch == '}' && stackCh != '{')
                     return false;
             }
         }

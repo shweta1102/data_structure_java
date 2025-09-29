@@ -48,42 +48,31 @@ public class MergeSortedLinkedLists {
     }
 
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode head = null;
-        ListNode temp = null;
-        ListNode prev = null;
-        if (list1 == null || list2 == null) {
-            head = list1 == null ? list2 : list1;
-        }
-        //adjust pointers till one of the list reaches the end
+        if (list1 == null)
+            return list2;
+        if (list2 == null)
+            return list1;
+        ListNode dummyNode = new ListNode(0);
+        dummyNode.next = null;
+        ListNode prev = dummyNode;
+
         while (list1 != null && list2 != null) {
             if (list1.val <= list2.val) {
-                temp = list1;
-                //move pointer till we reach the point where list1 val > list2 val
-                while (temp != null && temp.val <= list2.val) {
-                    prev = temp;
-                    temp = temp.next;
-                }
-                //set head node
-                if (head == null) {
-                    head = list1;
-                }
-                list1 = temp;
-                prev.next = list2;
-            } else {
-                temp = list2;
-                //move pointer till we reach the point where list1 val > list1 val
-                while (temp != null && temp.val <= list1.val) {
-                    prev = temp;
-                    temp = temp.next;
-                }
-                //set head node
-                if (head == null) {
-                    head = list2;
-                }
-                list2 = temp;
                 prev.next = list1;
+                prev = list1;
+                list1 = list1.next;
+            } else {
+                prev.next = list2;
+                prev = list2;
+                list2 = list2.next;
             }
         }
-        return head;
+        if (list1 != null) {
+            prev.next = list1;
+        }
+        if (list2 != null) {
+            prev.next = list2;
+        }
+        return dummyNode.next;
     }
 }

@@ -44,4 +44,24 @@ public class ValidPalindrome {
         }
         return true;
     }
+
+    public boolean isPalindromeOnePass(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+        char[] chArray = s.toCharArray();
+        while (left < right) {
+            if ((Character.isLetterOrDigit(chArray[left]) && Character.isLetterOrDigit(chArray[right]))) {
+                if ((Character.toUpperCase(chArray[left]) != Character.toUpperCase(chArray[right])))
+                    return false;
+                else {
+                    left++;
+                    right--;
+                }
+            } else if (!Character.isLetterOrDigit(chArray[left]))
+                left++;
+            else if (!Character.isLetterOrDigit(chArray[right]))
+                right--;
+        }
+        return true;
+    }
 }
