@@ -38,56 +38,60 @@ import java.util.HashMap;
  * At most 3 * 104 calls in total will be made to insert, search, and startsWith.
  */
 public class Trie {
-    private TrieNode root;
-
-    class TrieNode {
-        HashMap<Character, TrieNode> children;
-        Character val;
-        boolean isWord;
-
-        public TrieNode(Character val, boolean isWord, HashMap<Character, TrieNode> children) {
-            this.val = val;
-            this.isWord = isWord;
-            this.children = children;
-        }
-
-        public TrieNode(Character val) {
-            this.val = val;
-            this.isWord = false;
-            this.children = new HashMap();
-        }
-    }
+    TrieNode root;
 
     public Trie() {
-        root = new TrieNode(' ');
+        root = new TrieNode();
     }
 
     public void insert(String word) {
-        TrieNode current = root;
-        for (Character c : word.toCharArray()) {
-            current.children.putIfAbsent(c, new TrieNode(c));
-            current = current.children.get(c);
+        TrieNode node = root;
+        for (char ch : word.toCharArray()) {
+            TrieNode next = node.nodeMap.get(ch);
+            if (next == null) {
+                node.nodeMap.put(ch, new TrieNode());
+                next = node.nodeMap.get(ch);
+            }
+            node = next;
         }
-        current.isWord = true;
+        node.isEnd = true;
     }
 
     public boolean search(String word) {
-        TrieNode current = root;
-        for (Character c : word.toCharArray()) {
-            current = current.children.get(c);
-            if (current == null)
+        TrieNode node = root;
+        for (char ch : word.toCharArray()) {
+            TrieNode next = node.nodeMap.get(ch);
+            if (next == null) {
                 return false;
+            }
+            node = next;
         }
-        return current.isWord == true;
+        return node.isEnd;
     }
 
     public boolean startsWith(String prefix) {
-        TrieNode current = root;
-        for (Character c : prefix.toCharArray()) {
-            current = current.children.get(c);
-            if (current == null)
+        TrieNode node = root;
+        for (char ch : prefix.toCharArray()) {
+            TrieNode next = node.nodeMap.get(ch);
+            if (next == null) {
                 return false;
+            }
+            node = next;
         }
         return true;
+    }
+
+    class TrieNode {
+        HashMap<Character, TrieNode> nodeMap;
+        boolean isEnd;
+
+        public TrieNode() {
+            nodeMap = new HashMap<>();
+        }
+
+        public TrieNode(boolean isEnd) {
+            nodeMap = new HashMap<>();
+            this.isEnd = isEnd;
+        }
     }
 }

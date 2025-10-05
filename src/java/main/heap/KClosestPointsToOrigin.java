@@ -35,25 +35,24 @@ import java.util.PriorityQueue;
  */
 public class KClosestPointsToOrigin {
     public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<int[]> maxQueue = new PriorityQueue<int[]>(
-                (a, b) -> Double.compare(distance(b[0], b[1]), distance(a[0], a[1])));
-        for (int[] point : points) {
-            if (maxQueue.size() < k) {
-                maxQueue.add(point);
-            } else if (distance(point[0], point[1]) < distance(maxQueue.peek()[0], maxQueue.peek()[1])) {
-                maxQueue.poll();
-                maxQueue.add(point);
+        int[][] result = new int[k][2];
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<int[]>((a, b) -> (b[0] - a[0]));
+        for (int i = 0; i < points.length; i++) {
+            maxHeap.add(new int[]{getDistance(points[i][0], points[i][1]), i});
+            if (maxHeap.size() > k) {
+                maxHeap.remove();
             }
         }
-        int[][] result = new int[k][];
         int i = 0;
-        while (!maxQueue.isEmpty()) {
-            result[i++] = maxQueue.remove();
+        while (maxHeap.size() > 0) {
+            int[] index = maxHeap.remove();
+            result[i] = points[index[1]];
+            i++;
         }
         return result;
     }
 
-    private double distance(int x, int y) {
-        return Math.pow(x, 2) + Math.pow(y, 2);
+    private int getDistance(int x, int y) {
+        return (int) (Math.pow(x, 2) + Math.pow(y, 2));
     }
 }

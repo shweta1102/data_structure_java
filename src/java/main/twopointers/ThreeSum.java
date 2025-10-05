@@ -49,37 +49,31 @@ public class ThreeSum {
     public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<>();
-        int fixed = 0;
-        while (fixed < nums.length - 2) {
-            if (fixed != 0 && nums[fixed] == nums[fixed - 1]) {
-                fixed++;
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1])
                 continue;
-            }
-            int left = fixed + 1;
+            int left = i + 1;
             int right = nums.length - 1;
-            int target = -nums[fixed];
-            while (right > left) {
-                int sum = nums[left] + nums[right];
-                if (sum == target) {
-                    result.add(Arrays.asList(nums[left], nums[right], nums[fixed]));
-                    //to avoid duplicate move left till it is same value
-                    while (right > left && nums[left] == nums[left + 1]) {
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum == 0) {
+                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    //avoid duplicate triplets
+                    while ((left + 1) < right && nums[left] == nums[left + 1]) {
                         left++;
-                        sum = nums[left] + nums[right];
                     }
-                    //move right till it is same value
-                    while (right > left && nums[right] == nums[right - 1]) {
+                    while ((right - 1) > left && nums[right] == nums[right - 1]) {
                         right--;
-                        sum = nums[left] + nums[right];
                     }
-                }
-                if (sum >= target) {
+                    left++;
                     right--;
                 } else {
-                    left++;
+                    if (sum > 0)
+                        right--;
+                    else
+                        left++;
                 }
             }
-            fixed++;
         }
         return result;
     }

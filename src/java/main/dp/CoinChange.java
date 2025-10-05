@@ -13,31 +13,45 @@ public class CoinChange {
         return memoCoinChange(coins, amount, 0);
     }
 
-    public int dpCoinChange(int[] coins, int amount) {
-        int minCoins = -1;
+    public int coinChange1D(int[] coins, int amount) {
+        Arrays.sort(coins);
+        int[] dp = new int[amount + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = amount + 1;
+        }
+
+        for (int coin = 0; coin < coins.length; coin++) {
+            for (int amt = 1; amt <= amount; amt++) {
+                dp[amt] = (amt - coins[coin]) >= 0 ? Math.min(dp[amt], dp[amt - coins[coin]] + 1) : dp[amt];
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    public int dpCoinChange2D(int[] coins, int amount) {
         if (amount == 0)
             return 0;
-        result = new int[coins.length][amount + 1];
-        for (int coinIndex = 0; coinIndex < coins.length; coinIndex++) {
-            System.out.println("coin\n");
-            for (int amountIndex = 0; amountIndex <= amount; amountIndex++) {
-                if (amountIndex == 0) {
-                    result[coinIndex][amountIndex] = 0;
-                } else if (amountIndex - coins[coinIndex] < 0) {
-                    result[coinIndex][amountIndex] = coinIndex == 0 ? -1 : result[coinIndex - 1][amountIndex];
-                } else {
-                    if (result[coinIndex][amountIndex - coins[coinIndex]] == -1) {
-                        result[coinIndex][amountIndex] = coinIndex == 0 ? -1 : result[coinIndex - 1][amountIndex];
-                    } else {
-                        result[coinIndex][amountIndex] = 1 + result[coinIndex][amountIndex - coins[coinIndex]];
-                    }
+        if (coins.length == 0)
+            return -1;
+        Arrays.sort(coins);
+        int[][] dp = new int[coins.length + 1][amount + 1];
+        for (int i = 0; i <= amount; i++) {
+            dp[0][i] = amount + 1;
+        }
+        for (int i = 0; i <= coins.length; i++) {
+            dp[i][0] = 0;
+        }
+        for (int row = 1; row <= coins.length; row++) {
+            for (int col = 1; col <= amount; col++) {
+                if (col < coins[row - 1])
+                    dp[row][col] = dp[row - 1][col];
+                else {
+                    dp[row][col] = Math.min(dp[row - 1][col], (1 + dp[row][col - coins[row - 1]]));
                 }
             }
-            System.out.println(result[coinIndex][amount] + "\t");
-            if (result[coinIndex][amount] > 0)
-                minCoins = minCoins < 0 ? result[coinIndex][amount] : Math.min(minCoins, result[coinIndex][amount]);
         }
-        return minCoins;
+        return dp[coins.length][amount] > amount ? -1 : dp[coins.length][amount];
     }
 
     public int recurCoinChange(int[] coins, int amount, int currentIndex) {
