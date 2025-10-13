@@ -46,40 +46,30 @@ import java.util.PriorityQueue;
 public class MedianFromDataStream {
     PriorityQueue<Integer> minHeap;
     PriorityQueue<Integer> maxHeap;
+    int totalSize;
 
     public MedianFromDataStream() {
         minHeap = new PriorityQueue<Integer>((a, b) -> (a - b));
         maxHeap = new PriorityQueue<Integer>((a, b) -> (b - a));
+        totalSize = 0;
     }
 
     public void addNum(int num) {
         //if size of both heap is same add the number to min heap
         //else move top element from max to min and add the number to max heap
-        if (minHeap.size() != maxHeap.size()) {
-            if (num <= minHeap.peek()) {
-                maxHeap.add(num);
-                return;
-            } else {
-                maxHeap.add(minHeap.remove());
-            }
-
+        //add numbers from minheap to max heap till the number is greater than top of minheap
+        if (minHeap.size() == maxHeap.size()) {
+            minHeap.add(num);
+            maxHeap.add(minHeap.remove());
         } else {
-            if (minHeap.size() > 0 && maxHeap.size() > 0 && num <= maxHeap.peek()) {
-                minHeap.add(maxHeap.remove());
-                maxHeap.add(num);
-                //System.out.println(num);
-                return;
-            }
+            maxHeap.add(num);
+            minHeap.add(maxHeap.remove());
         }
-        minHeap.add(num);
+        totalSize++;
     }
 
     public double findMedian() {
-        // System.out.println(maxHeap + " " + minHeap);
-        if (minHeap.size() != maxHeap.size()) {
-            return minHeap.peek();
-        }
-        return (double) (minHeap.peek() + maxHeap.peek()) / 2;
+        return (totalSize % 2) == 0 ? ((double) (minHeap.peek() + maxHeap.peek()) / 2) : maxHeap.peek();
     }
 
     public void addNumClean(int num) {
