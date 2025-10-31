@@ -127,4 +127,77 @@ public class LongestPalindromicSubstring {
         }
         return s.substring((center - maxLength) / 2, (center + maxLength) / 2);
     }
+
+    String subString;
+
+    public String longestPalindromeRecurssion(String s) {
+        longestPalindromeHelper(s, 0, s.length() - 1);
+        return subString;
+    }
+
+    private boolean longestPalindromeHelper(String s, int start, int end) {
+        if (start == end) {
+            String temp = s.substring(start, end + 1);
+            subString = subString == null ? temp : temp.length() > subString.length() ? temp : subString;
+            return true;
+        }
+        if (start > end)
+            return true;
+        if (s.charAt(start) == s.charAt(end) && longestPalindromeHelper(s, start + 1, end - 1)) {
+            String temp = s.substring(start, end + 1);
+            subString = subString == null ? temp : temp.length() > subString.length() ? temp : subString;
+            return true;
+        }
+        longestPalindromeHelper(s, start + 1, end);
+        longestPalindromeHelper(s, start, end - 1);
+        return false;
+    }
+
+    public String longestPalindromeMemoization(String s) {
+        boolean[][] memo = new boolean[s.length()][s.length()];
+        boolean[][] visited = new boolean[s.length()][s.length()];
+        longestPalindromeMemoHelper(s, 0, s.length() - 1, memo, visited);
+        return subString;
+    }
+
+    private boolean longestPalindromeMemoHelper(String s, int start, int end, boolean[][] memo, boolean[][] visited) {
+        if (visited[start][end])
+            return memo[start][end];
+        visited[start][end] = true;
+        if (start == end) {
+            String temp = s.substring(start, end + 1);
+            subString = subString == null ? temp : temp.length() > subString.length() ? temp : subString;
+            memo[start][end] = true;
+            return true;
+        }
+        if (start > end)
+            return true;
+        if (s.charAt(start) == s.charAt(end) && longestPalindromeMemoHelper(s, start + 1, end - 1, memo, visited)) {
+            String temp = s.substring(start, end + 1);
+            subString = subString == null ? temp : temp.length() > subString.length() ? temp : subString;
+            memo[start][end] = true;
+            return true;
+        }
+        longestPalindromeMemoHelper(s, start + 1, end, memo, visited);
+        longestPalindromeMemoHelper(s, start, end - 1, memo, visited);
+        return false;
+    }
+
+    public String longestPalindromeDp(String s) {
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            dp[i][i] = true;
+            subString = s.substring(i, i + 1);
+        }
+        for (int len = 2; len <= s.length(); len++) {
+            for (int start = 0; start <= s.length() - len; start++) {
+                int end = start + len - 1;
+                if (s.charAt(start) == s.charAt(end) && (len == 2 || dp[start + 1][end - 1])) {
+                    dp[start][end] = true;
+                    subString = subString.length() < (end - start + 1) ? s.substring(start, end + 1) : subString;
+                }
+            }
+        }
+        return subString;
+    }
 }

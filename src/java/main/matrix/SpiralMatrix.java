@@ -29,60 +29,33 @@ import java.util.List;
  */
 public class SpiralMatrix {
     public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> order = new ArrayList<Integer>();
-        //l1 --> left boundary
-        int l1 = 0;
-        //l2 --> right boundary
-        int l2 = matrix[0].length - 1;
-        //h1 --> upper boundary
-        int h1 = 0;
-        //h2 --> bottom boundary
-        int h2 = matrix.length - 1;
-        int iteration = 1;
-        //spiral till we reach from left to right and upper to lower
-        while (l1 <= l2 && h1 <= h2) {
-            switch (iteration) {
-                //left to right
-                case 1: {
-                    for (int i = l1; i <= l2; i++) {
-                        order.add(matrix[h1][i]);
-                    }
-                    //move upper boundary one down
-                    h1++;
-                    break;
-                }
-                //upper to lower
-                case 2: {
-                    for (int i = h1; i <= h2; i++) {
-                        order.add(matrix[i][l2]);
-                    }
-                    //move right boundary one left
-                    l2--;
-                    break;
-                }
-                //right to left
-                case 3: {
-                    for (int i = l2; i >= l1; i--) {
-                        order.add(matrix[h2][i]);
-                    }
-                    //move lower boundary one up
-                    h2--;
-                    break;
-                }
-                //lower to upper
-                case 4: {
-                    for (int i = h2; i >= h1; i--) {
-                        order.add(matrix[i][l1]);
-                    }
-                    //move left boundary to right by one
-                    l1++;
-                    break;
-                }
+        int upper = 0;
+        int lower = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        List<Integer> result = new ArrayList<Integer>();
+
+        while (upper <= lower && left <= right) {
+            //first row
+            for (int i = left; i <= right && upper <= lower; i++) {
+                result.add(matrix[upper][i]);
             }
-            iteration++;
-            if (iteration == 5)
-                iteration = 1;
+            upper++;
+            //last column
+            for (int i = upper; i <= lower && left <= right; i++) {
+                result.add(matrix[i][right]);
+            }
+            right--;
+            //last row
+            for (int i = right; i >= left && upper <= lower; i--) {
+                result.add(matrix[lower][i]);
+            }
+            lower--;
+            for (int i = lower; i >= upper && left <= right; i--) {
+                result.add(matrix[i][left]);
+            }
+            left++;
         }
-        return order;
+        return result;
     }
 }

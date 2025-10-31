@@ -38,6 +38,19 @@ import java.util.TreeSet;
  * accounts[i][j] (for j > 0) is a valid email.
  */
 public class AccountsMerge {
+    /**
+     * Time Complexity
+     * Building graph / unions	O(N × K) (N = accounts, K = emails/account)
+     * Union-Find operations	~O(α(N)) (inverse Ackermann, almost constant)
+     * Sorting	O(M log M), M = total unique emails
+     * Overall	O(N × K log M)
+     * <p>
+     * Space Complexity
+     * O(M)
+     *
+     * @param accounts
+     * @return
+     */
     public List<List<String>> accountsMergeWithUnionFind(List<List<String>> accounts) {
         HashMap<String, String> parent = new HashMap<String, String>();
         HashMap<String, String> emailToName = new HashMap<>();

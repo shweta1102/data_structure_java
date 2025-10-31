@@ -78,30 +78,24 @@ public class BinaryTreeRightSideView {
      * @return
      */
     public List<Integer> rightSideViewWithBFS(TreeNode root) {
+        List<Integer> order = new ArrayList<>();
         if (root == null)
-            return new ArrayList<Integer>();
-        List<Integer> list = new ArrayList<Integer>();
+            return order;
         Queue<TreeNode> queue = new LinkedList<TreeNode>();
         queue.add(root);
-        queue.add(null);
         while (!queue.isEmpty()) {
-            TreeNode current = queue.remove();
-            TreeNode next = queue.peek();
-
-            if (current == null) {
-                if (!queue.isEmpty())
-                    queue.add(null);
-            } else {
-                if (next == null) {
-                    list.add(current.val);
-                }
-                if (current.left != null)
-                    queue.add(current.left);
-                if (current.right != null)
-                    queue.add(current.right);
+            int size = queue.size();
+            for (int i = 1; i <= size; i++) {
+                TreeNode node = queue.remove();
+                if (i == size)
+                    order.add(node.val);
+                if (node.left != null)
+                    queue.add(node.left);
+                if (node.right != null)
+                    queue.add(node.right);
             }
         }
-        return list;
+        return order;
     }
 
     /**
